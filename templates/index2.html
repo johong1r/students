@@ -6,8 +6,27 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>{{ student.name }}</h1>
+    <div class="cards">
+        {% for student in students %}
+            <div class="students_card">
+                <div>
+                    <a href="{% url 'dateils' id=student.id %}">
+                        {% if student.avatar %}
+                            <img src="{{ student.avatar.url }}" alt="{{ student.name }}">
+                        {% else %}
+                            No avatar
+                        {% endif %}
+                    </a>
+                </div>
+                <div>name: {{ student.name }}</div>
+                <div>group: {{ student.group.name }}</div>
+                <div>age: {{ student.age }}</div>
+                <div>email: {{ student.email }}</div>
+                <div>phonenumber: {{ student.phonenumber }}</div>
+            </div>
+        
+        {% endfor %}
 
-    <p>{{ student.discription }}</p>  
+    </div>  
 </body>
 </html>

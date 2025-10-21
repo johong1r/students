@@ -47,3 +47,11 @@ class Tag(models.Model):
     class Meta:
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
+
+
+class StudentContract(models.Model):
+    student = models.OneToOneField(Student, on_delete=models.CASCADE, related_name='contract')
+    balance = models.DecimalField(default=0, decimal_places=2, max_digits=10, verbose_name='Баланс', )
+
+    def __str__(self):
+        return f"Contract for {'Student.name'} balance: {'StudentContract.balance'}"
