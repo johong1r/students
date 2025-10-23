@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Student, Group, Tag
+from .models import Student, Group, Tag, StudentContract
 
 from django.utils.html import format_html
 
@@ -41,6 +41,13 @@ class TagAdmin(admin.ModelAdmin):
     list_per_page = 20   
 
 
+class StudentContractAdmin(admin.ModelAdmin):
+    # list_display = ('id', 'name')         
+    # search_fields = ('name',)             
+    # list_per_page = 20   
+    pass
+
 admin.site.register(Student, StudentAdmin)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Tag, TagAdmin)
+admin.site.register(StudentContract, StudentContractAdmin)

@@ -19,6 +19,12 @@
                     <div>group: {{ student.group.name }}</div>
                     <div>email: {{ student.email }}</div>
                     <div>phonenumber: {{ student.phonenumber }}</div>
+
+                    {% if student.contract %}
+                        <div>Balance: {{ student.contract.balance }} сом</div>
+                    {% else %}
+                        <div>Balance: нет контракта</div>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>

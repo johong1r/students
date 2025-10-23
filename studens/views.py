@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.files.storage import FileSystemStorage
-from students.models import Student, Group
+from studens.models import Student, Group
 from .forms import StudentModelForm, StudentForm
 from .filters import StudentFilter
 from django.views import View
@@ -53,16 +53,14 @@ class StudentUpdateView(UpdateView):
     form_class = StudentModelForm
 
 
-# class StudentDeleteView(CreateView):
-#     model = Student
-#     template_name = 'create_student.html'
-#     form_class = StudentModelForm
-
 
 class StudentDetailView(DetailView):
     model = Student
     template_name = 'index2.html'
     form_class = StudentModelForm
+
+
+
 
 
 # class StudentCreateView(CreateView):
