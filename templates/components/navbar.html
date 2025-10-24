@@ -1,0 +1,32 @@
+{% load static %}
+
+<div class="container">
+
+    <header>
+        <div>         
+            <a href="{% url 'main' %}">
+                
+            </a>
+        </div>
+        <nav>
+            <a href="{% url 'main' %}">Home</a>
+            <a href="#">Blog</a>
+            <a href="#">About</a>
+            <a href="#">Contcts</a>
+
+            {% if request.user.is_staff or request.user.is_superuser %}
+                <a href="{% url 'admin_view' %}">Admin Page</a>
+            {% else %}
+                <a href="{% url 'register' %}">Registeration</a>
+                <a href="{% url 'login' %}">Login</a>
+            {% endif %}
+        </nav>
+        <div>
+            <form action="{% url 'main' %}" method="GET">
+                <input type="text" name="search" value={{ search }}>
+                <input type="submit">
+            </form>
+        </div>
+    </header>
+    
+</div>

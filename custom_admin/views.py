@@ -8,16 +8,16 @@ from custom_admin.forms import StudentModelForm
 
 
 class MainAdminView(TemplateView):
-    template_name = 'main.html'
+    template_name = 'custom_admin/main.html'
 
 
 class StudentDetailView(DetailView):
     model = Student
-    template_name = 'student_detail.html'
-    context_object_name = 'student'
+    template_name = 'custom_admin/student_detail.html'
+    context_object_name = 'student'  
 
 
 class StudentCreateView(CreateView):
     model = Student
-    template_name = 'student_create.html'
+    template_name = 'custom_admin/student_create.html'
     form_class = StudentModelForm

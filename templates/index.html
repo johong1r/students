@@ -1,35 +1,79 @@
+{% extends "base.html" %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
+{% block blocktitle%}
+    {{ title }}
+{% endblock blocktitle %} 
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static 'css/main.css' %}">
-</head>
 
-<body>
-        <div class="cards">
-            {% for student in students %}
-                <div class="students_card">
-                    <img src="{{ student.avatar.url }}" alt="">
-                    <div>name: {{ student.name }}</div>
-                    <div>group: {{ student.group.name }}</div>
-                    <div>email: {{ student.email }}</div>
-                    <div>phonenumber: {{ student.phonenumber }}</div>
+{% block content %}
 
-                    {% if student.contract %}
-                        <div>Balance: {{ student.contract.balance }} сом</div>
-                    {% else %}
-                        <div>Balance: нет контракта</div>
-                    {% endif %}
-                </div>
-            {% endfor %}
+<h1>Hello, world! from templates</h1>
+
+<h2>Students</h2>
+
+<div>
+    <h2>Filter Students</h2>
+
+    <form method='GET'>
+        {% csrf_token %}
+        {{ filter.form.as_p }}
+        <div class="student_form_button">
+            <button>filter</button>
         </div>
+    </form>
+</div>
 
-        
-</body>
+{% comment %} {{ object_list }} {% endcomment %}
 
-</html>
+
+<div class="students_container">
+    {% for student in students %}
+        <div class="student_card">
+            <div>
+                <a href="{% url 'student_detail' id=student.id %}">
+                    {% if student.avatar %}
+                        <img src="{{ student.avatar.url }}" alt="{{ student.name }}">
+                    {% else %}
+                        No avatar
+                    {% endif %}
+                </a> 
+            </div>
+            <div>name: {{ student.name }}</div>
+            <div>group: {{ student.group.name }}</div>
+            <div>age: {{ student.age }}</div>
+            <div>email: {{ student.email }}</div>
+            <div>phone number: {{ student.phone_number }}</div>
+            <div>balance: {{ student.contract.balance }}</div>
+            {% comment %} <div>
+                <a href="{% url 'student_detail' id=student.id%}">remove</a>
+            </div> {% endcomment %}
+        </div>
+    {%  endfor %} 
+</div>
+
+<div>
+    {% if is_paginated %} 
+        <div class="pagination">
+            <div class="pagination_btns">
+                {% if students.has_previous %}
+                    <a class="page_link" href="?page={{ students.previous_page_number }}"><</a>
+                {% endif %}
+                
+                {% for i in students.paginator.page_range %}
+                    {% if students.number == i %}
+                        <span class="page_link">{{ i }}</span>
+                    {% else %}
+                        <a class="page_link" href="?page={{ i }}">{{ i }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if students.has_next %}
+                    <a class="page_link" href="?page={{ students.next_page_number }}">></a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock content %}

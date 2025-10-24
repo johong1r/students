@@ -1,53 +1,64 @@
 from django.contrib import admin
-from django.utils.html import format_html
-from .models import Student, Group, Tag, StudentContract
 
-from django.utils.html import format_html
+from .models import Student, Group, Teacher, Tag, StudentContract
+
+
+
+class StudentContractAdmin(admin.ModelAdmin):
+    list_display = ('student__name', "balance", "student__join_date")
+    search_fields = ('student__name',)
+
+
+class TagAdmin(admin.ModelAdmin):
+    list_display = ("id", "name")
+    list_display_links = ("id", "name")
+    search_fields = ("name", "id")
+
 
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'age', 'group', 'logo_preview',)
+    list_display = ('id', 'name', 'email', 'phone_number',)
     list_display_links = ('id', 'name',)
-    search_fields = ('id', 'name', 'group',)
-    list_filter = ('group__name', 'age', 'tags',)
-    ordering = ('updated_date',)
-    list_editable = ("age",)
-    readonly_fields = ['updated_date', 'join_date', 'logo_preview']
-    fieldsets = (
-        ('Основная информация', {
-            'fields': ('avatar', 'name', 'age', 'group', 'email', 'phonenumber', 'discription', )
-        }),
-        ('Дополнительная информация', {
-            'fields': ['updated_date']
-        })
-    )
+    search_fields = ('name', 'email', 'group__name')
+    list_filter = ('group__name', 'age', 'tags__name')
+    ordering = ('-join_date', '-updated_date')
+    # list_editable = ("phone_number", 'email')
+    readonly_fields = ('join_date', 'updated_date') 
+    filter_horizontal = ("tags", )
+    # list_select_related = ("tags")
+    # raw_id_fields = ("tags",)
+    # list_per_page = 100
+    # fieldsets = (
+    #     ('Основная информация', {
+    #         'fields': ('name', 'last_name', 'age', 'email', 'phone_number', 'group', 'avatar', )
+    #     }),
+    #     ('Дополнительная информация', {
+    #         'fields': ('join_date', 'updated_date'),    
+    #         'classes': ('collapse',)
+    #     }),
+    # )
+    # prepopulated_fields = {'last_name': ('name',)}
     date_hierarchy = 'join_date'
+    # fields = ('name', 'email', 'last_name')
+    exclude = ("last_name",)
     save_on_top = True
 
-    def logo_preview(self, obj):
-        if obj.avatar and hasattr(obj.avatar, 'url'): 
-            return format_html('<img src="{}" width="60" height="60" style="border-radius:5px;"/>', obj.avatar.url)
-        return "— нет аватара —"  # вместо ошибки
+    @admin.action(description="Активировать пользователей")
+    def make_active(modeladmin, request, queryset):
+        queryset.update(is_active=True)
 
-    logo_preview.short_description = "Аватар"
+    actions = [make_active]
 
 
 class GroupAdmin(admin.ModelAdmin):
     pass
 
 
-class TagAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name')         
-    search_fields = ('name',)             
-    list_per_page = 20   
-
-
-class StudentContractAdmin(admin.ModelAdmin):
-    # list_display = ('id', 'name')         
-    # search_fields = ('name',)             
-    # list_per_page = 20   
+class TeacherAdmin(admin.ModelAdmin):
     pass
 
+
+admin.site.register(Tag, TagAdmin)
 admin.site.register(Student, StudentAdmin)
 admin.site.register(Group, GroupAdmin)
-admin.site.register(Tag, TagAdmin)
+admin.site.register(Teacher, TeacherAdmin)
 admin.site.register(StudentContract, StudentContractAdmin)
